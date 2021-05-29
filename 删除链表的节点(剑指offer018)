@@ -1,0 +1,66 @@
+/*
+给定单向链表的头指针和一个要删除的节点的值，定义一个函数删除该节点。
+返回删除后的链表的头节点。
+*/
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+ 
+class Solution {
+public:
+    ListNode* deleteNode(ListNode* head, int val) {
+        // 判断是否删除节点为初始头节点
+        if (head->val==val) return head->next;
+        // 时间复杂度O(n),空间复杂度O(n)
+        // 栈方法
+        // stack<ListNode*> stk;
+        // ListNode* pre=head;
+        // 将链表每个节点一次压入栈，当栈顶节点指针对应的值与目标值相等是，将栈顶节点指针删除并记录当前指针。
+        // 再将现栈顶节点的next指针指向当前指针的下一个指针。
+        // while(head){
+        //     stk.push(head);
+        //     if (head->val==val){
+        //         stk.pop();
+        //         stk.top()->next = head->next;
+        //         return pre;
+        //     }
+        //     head=head->next;
+        // }
+        
+        // 双指针
+        // 时间复杂度O(n),空间复杂度O(1)
+        // 分别对两个指针赋值，一个赋值头节点指针，一个赋值头节点的下一个指针
+        // 两个指针同时沿着链表方向向后取节点指针，直到后一个指针对应的值为目标值val，停止取值。
+        // 此时，令前一个指针pre的next指针指向后一个指针pre1的next指针
+        // ListNode* pre = head, *pre1 = head->next;
+        // while(pre1){
+        //     if(pre1->val==val){
+        //         pre->next = pre1->next;
+        //         break;
+        //     }
+        //     pre = pre->next;
+        //     pre1 = pre1->next;
+        // }
+
+        // 单指针
+        // 时间复杂度O(n),空间复杂度O(1)
+        // 声明一个指针变量，并赋值为head地址，沿着链表向后取节点指针
+        // 每次判断当前指针的next指针所对应的值是否等于目标值val
+        // 如果等于目标值val，则使得当前节点的next指针指向当前节点的下下个指针
+        ListNode* pre=head;
+        while(pre){
+            if(pre->next->val==val){
+                pre->next = pre->next->next;
+                break;
+            }
+            pre = pre->next;
+        }
+        return head;
+    }
+};
