@@ -1,0 +1,63 @@
+/*
+定义一个函数，输入一个链表的头节点，反转该链表并输出反转后链表的头节点。
+*/
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+*/
+
+
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        // 双指针+中转节点
+        // 时间复杂度O(N)，空间复杂度O(1)
+        // 令pre指针指向前一个节点，令cur指针指向后一个节点
+        // 令cur指针的next指向pre指针，
+        // 遍历链表，并依靠nxt指针过度两个节点的指针
+        // 最后pre指针为反转后的头节点
+        // ListNode* pre = NULL;
+        // ListNode* cur = head;
+        // ListNode* nxt;
+        // while(cur) {
+        //     nxt = cur -> next;
+        //     cur -> next = pre;
+        //     pre = cur;
+        //     cur = nxt;
+        // }
+        // return pre;
+
+        // 妖魔化的双指针
+        // 时间复杂度O(N)，空间复杂度O(1)
+        // 首先令中转指针mid指向head->next->next,然后令head->next的next指向cur节点即反转过程
+        // 然后令cur向后移动一位，指向head->next,并且让head->next指向head->next的next节点
+        // 直到head->next指向空节点停止
+        // 该思想主要将head->next作为参照移动对象
+        // ListNode *mid, *cur=head;
+        // if (head==NULL) return NULL;
+        // while (head->next) {
+        //     mid = head->next->next;
+        //     head->next->next = cur;
+        //     cur = head->next;
+        //     head->next = mid;
+        // }
+        // return cur;
+
+        // 递归
+        // 时间复杂度O(N)，空间复杂度O(N)，空间复杂度主要取决于递归调用的栈空间，最多为 nn 层。
+        if(!head || !head->next){
+            return head;
+        }
+        // 使用递归函数，一直递归到链表的最后一个结点，该结点就是反转后的头结点newhead.
+        ListNode* newHead = reverseList(head->next);
+        // 每次函数在返回的过程中，让当前结点的下一个结点的next指针指向当前节点。
+        head->next->next = head;
+        // 同时让当前结点的next指针指向NULL，实现从链表尾部开始的局部反转
+        head->next = nullptr;
+        return newHead;
+    }
+};
