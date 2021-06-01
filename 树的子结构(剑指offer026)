@@ -1,0 +1,40 @@
+/*
+输入两棵二叉树A和B，判断B是不是A的子结构。(约定空树不是任意一个树的子结构)
+B是A的子结构， 即A中有出现和B相同的结构和节点值。
+*/
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+
+class Solution {
+public:
+    bool isSubStructure(TreeNode* A, TreeNode* B) {
+        // 特例处理：当树A为空或树B为空时，直接返回false；即bool (A&&B)
+        /*返回值：若树B是树A的子结构，则必满足以下三种情况之一，因此用或||连接；
+        以节点A为根节点的子树包含树B，对应recur(A,B)；
+        树B是树A左子树的子结构，对应isSubStructure(A.left, B)；
+        树B是树A右子树的子结构，对应isSubStructure(A.right, B)；*/
+        return bool (A&&B) && (recur(A, B) || isSubStructure(A->left, B) || isSubStructure(A->right, B));
+    }
+    // recur(A, B) 函数：
+
+    /*终止条件：
+    当节点B为空：说明树B已匹配完成（越过叶子节点），因此返回true；
+    当节点A为空：说明已经越过树A叶子节点，即匹配失败，返回false；
+    当节点A和B的值不同：说明匹配失败，返回false；
+    返回值：
+    判断A和B的左子节点是否相等，即recur(A.left, B.left)；
+    判断A和B的右子节点是否相等，即recur(A.right, B.right)；*/
+    bool recur(TreeNode* A, TreeNode* B) {
+        if (!B) return true; // 递归终止条件
+        if (!A || A->val != B->val) return false;
+        return recur(A->left, B->left) && recur(A->right, B->right);
+    }
+};
