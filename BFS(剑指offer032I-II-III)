@@ -1,4 +1,48 @@
-/*请实现一个函数按照之字形顺序打印二叉树，即第一行按照从左到右的顺序打印，第二层按照从右到左的顺序打印，第三行再按照从左到右的顺序打印，其他行以此类推。*/
+// I 从上到下打印出二叉树的每个节点，同一层的节点按照从左到右的顺序打印。
+// 时间复杂度O(n),空间复杂度O(n)
+class Solution {
+public:
+    // 时间复杂度O(n),空间复杂度O(n)
+    vector<int> levelOrder(TreeNode* root) {
+        queue<TreeNode*> que;
+        vector<int> res;
+        // 迭代,根据队列先进先出特点
+        if (!root) return {};
+        que.push(root);
+        while (!que.empty()) {
+            TreeNode* node = que.front();
+            que.pop();
+            res.push_back(node->val);
+            if (node->left) que.push(node->left);
+            if (node->right) que.push(node->right);
+        }
+        return res;
+    }
+};
+// II 从上到下按层打印二叉树，同一层的节点按从左到右的顺序打印，每一层打印到一行。
+class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        vector<vector<int>> res;
+        if (!root) return {};
+        queue<TreeNode*> que;
+        que.push(root); 
+        while(!que.empty()){
+            // 记录每一层队列的长度
+            int m= que.size();
+            res.push_back({});
+            for (int i=0; i< m; ++i) {
+                TreeNode* node = que.front();
+                que.pop();
+                res.back().push_back(node->val);
+                if (node->left) que.push(node->left);
+                if (node->right) que.push(node->right);
+            }
+        }
+        return res;
+    }
+};
+// III 请实现一个函数按照之字形顺序打印二叉树，即第一行按照从左到右的顺序打印，第二层按照从右到左的顺序打印，第三行再按照从左到右的顺序打印，其他行以此类推。
 class Solution {
 public:
     vector<vector<int>> levelOrder(TreeNode* root) {
@@ -6,6 +50,7 @@ public:
         vector<vector<int>> res;
         queue<TreeNode*> que;
         que.push(root);
+        //
         while (!que.empty()) {
             res.push_back({});
             int num = que.size();
@@ -17,6 +62,7 @@ public:
                 if (node-> right) que.push(node->right);
             }
         }
+        // 直接逆转奇数索引数组
         int n = res.size();
         for (int i=1; i< n; i+=2){
             reverse(res[i].begin(),res[i].end());
@@ -24,14 +70,18 @@ public:
         return res;
     }
 };
-        // int index=1；
+    // 栈方法
+        // 记录循环的次数，作为奇偶数的判别索引
+        // int index=1;
         // while (!que.empty()) {
         //     res.push_back({});
         //     num = que.size();
         //     stack<TreeNode*> stk;
+               // 如果奇数列数组
         //     if (index%2) {
         //         queue<TreeNode*> q= que;
         //         int m = num;
+                // 由于要逆序打印数值，则将队列的节点依次压入栈中，
         //         while(m) {
         //             stk.push(q.front());
         //             q.pop();
@@ -39,21 +89,24 @@ public:
         //         }
         //     }
         //     for (int i= 0; i< num; ++i) {
+                // 如果奇数列数组，从栈处理节点
         //         if (index%2) {
         //             TreeNode* node1= stk.top();
         //             stk.pop();
+                // 奇数时从栈stk打印数值
         //             res.back().push_back(node1->val);
-        //             // if (node-> left) que.push(node->left);
-        //             // if (node-> right) que.push(node->right);
         //         }
+                // 同时，分层的层序遍历队列处理方式保持不变
         //         TreeNode* node= que.front();
         //         que.pop();
+                // 偶数时从队列que打印数值
         //         if (index%2!=1){
         //             res.back().push_back(node->val);
         //         }
         //         if (node-> left) que.push(node->left);
         //         if (node-> right) que.push(node->right);
         //     }
+               // 记录层的变量，每一次循环自增
         //     index++;
         // }
         // return res;
