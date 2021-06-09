@@ -1,0 +1,22 @@
+/*输入一棵二叉树和一个整数，打印出二叉树中节点值的和为输入整数的所有路径。从树的根节点开始往下一直到叶节点所经过的节点形成一条路径。*/
+class Solution {
+public:
+    vector<vector<int>> res;
+    vector<int> path;
+    vector<vector<int>> pathSum(TreeNode* root, int target) {
+        recur(root ,target);
+        return res;
+    }
+    void recur(TreeNode* root , int sum){
+        if(root == nullptr) return;
+        path.push_back(root -> val);
+        sum -= root -> val;
+        if(sum == 0 && root -> left == nullptr && root -> right == nullptr){
+            res.push_back(path);
+        }
+        recur(root -> left ,sum);
+        recur(root -> right ,sum);
+        path.pop_back();
+    }
+};
+
