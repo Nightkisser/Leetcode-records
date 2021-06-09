@@ -1,21 +1,30 @@
 /*输入一棵二叉树和一个整数，打印出二叉树中节点值的和为输入整数的所有路径。从树的根节点开始往下一直到叶节点所经过的节点形成一条路径。*/
+
 class Solution {
 public:
+    //初始化： 结果列表 res ，路径列表 path 。
     vector<vector<int>> res;
-    vector<int> path;
+    vector<int> path; 
     vector<vector<int>> pathSum(TreeNode* root, int target) {
         recur(root ,target);
         return res;
     }
+    // 递推参数： 当前节点 root ，当前目标值 tar 。
     void recur(TreeNode* root , int sum){
+        // 终止条件： 若节点 root 为空，则直接返回。
         if(root == nullptr) return;
         path.push_back(root -> val);
+        // 目标值更新： tar = tar - root.val（即目标值 tar 从 sum 减至 00 ）；
         sum -= root -> val;
+        // 路径更新： 将当前节点值 root.val 加入路径 path ；
         if(sum == 0 && root -> left == nullptr && root -> right == nullptr){
+        // 路径记录： 当 ① root 为叶节点 且 ② 路径和等于目标值 ，则将此路径 path 加入 res 。
             res.push_back(path);
         }
+        // 先序遍历： 递归左 / 右子节点。
         recur(root -> left ,sum);
         recur(root -> right ,sum);
+        // 路径恢复： 向上回溯前，需要将当前节点从路径 path 中删除，即执行 path.pop() 。
         path.pop_back();
     }
 };
