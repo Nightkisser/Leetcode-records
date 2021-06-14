@@ -20,4 +20,32 @@ private:
         pre = cur;
         dfs(cur->right);
     }
+    
+// 中序遍历，二次循环
+Node* treeToDoublyList(Node* root) {
+        if (!root) return nullptr;
+        vector<Node*> res;
+        inorder(root,res);
+        Node* cur= res[0];
+        // Node* n= new Node(cur->val);
+        int m = res.size();
+        for (int i= 1;i< res.size();++i) {
+            cur->right = res[i];
+            cur= cur->right;
+        }
+        cur->right = res[0];
+        cur= res[0];
+        for (int i= 1;i< res.size();++i) {
+            cur->left = res[m-i];
+            cur= cur->left;
+        }
+        cur->left = res[0];
+        return res[0];
+    }
+    void inorder(Node* root, vector<Node*>& res) {
+        if (!root) return ;
+        inorder(root->left,res);
+        res.push_back(root);
+        inorder(root->right,res);
+    }
 };
