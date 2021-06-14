@@ -1,11 +1,18 @@
 // 请实现 copyRandomList 函数，复制一个复杂链表。在复杂链表中，每个节点除了有一个 next 指针指向下一个节点，还有一个 random 指针指向链表中的任意节点或者 null。
 
-class Node {
+class Solution {
 public:
-    int val;
-    Node* next;
-    Node(int _val) {
-        val = _val;
-        next = NULL;
+    Node* copyRandomList(Node* head) {
+        Node* cur = head;
+        Node* dum = new Node(0), *pre = dum;
+        while(cur != nullptr) {
+            Node* node = new Node(cur->val); // 复制节点 cur
+            pre->next = node;                // 新链表的 前驱节点 -> 当前节点
+            // pre->random = "???";          // 新链表的 「 前驱节点 -> 当前节点 」 无法确定
+            cur = cur->next;                 // 遍历下一节点
+            pre = node;                      // 保存当前新节点
+        }
+        return dum->next;
     }
 };
+
