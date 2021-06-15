@@ -1,0 +1,33 @@
+/*输入一个字符串，打印出该字符串中字符的所有排列。
+你可以以任意顺序返回这个字符串数组，但里面不能有重复元素。*/
+
+class Solution {
+public:
+    // 时间复杂度 O(N!N)：N为字符串s的长度；时间复杂度和字符串排列的方案数成线性关系，方案数为N \ times (N-1) \ times(N-2) … \times 2 \times 1N×(N−1)×(N−2)…×2×1 ，即复杂度为 O(N!)；
+    // 字符串拼接操作使用O(N)；因此总体时间复杂度为O(N!N)O(N!N)。
+    // 空间复杂度 O(N^2)：全排列的递归深度为N，系统累计使用栈空间大小为 O(N)O(N)；递归中辅助 Set 累计存储的字符数量最多为N + (N-1) + ... + 2 + 1 = (N+1)N/2N+(N−1)+...+2+1=(N+1)N/2，
+    // 即占用O(N2) 的额外空间。
+    vector<string> permutation(string s) {
+        dfs(s, 0);
+        return res;
+    }
+private:
+    vector<string> res;
+    void dfs(string s, int x) {
+        if(x == s.size() - 1) {
+            res.push_back(s);                       // 添加排列方案
+            return;
+        }
+        set<int> st;
+        for(int i = x; i < s.size(); i++) {
+            if(st.find(s[i]) != st.end()) continue; // 重复，因此剪枝
+            st.insert(s[i]);
+            swap(s[i], s[x]);                       // 交换，将 s[i] 固定在第 x 位
+            dfs(s, x + 1);                          // 开启固定第 x + 1 位字符
+            swap(s[i], s[x]);                       // 恢复交换
+        }
+    }
+};
+
+
+ 
