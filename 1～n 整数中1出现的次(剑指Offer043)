@@ -1,0 +1,29 @@
+// 输入一个整数 n ，求1～n这n个整数的十进制表示中1出现的次数。
+// 例如，输入12，1～12这些整数中包含1 的数字有1、10、11和12，1一共出现了5次。
+
+class Solution {
+public:
+    int countDigitOne(int n) {
+        // digit记录十的次数,res记录结果
+        long long digit = 1, res = 0;
+        // high记录高位数，cur记录当前位数，low记录低位数
+        int high = n / 10, cur = n % 10, low = 0;
+        while(high!=0 || cur!=0) {
+            // cur为0时，必须要高位减少1
+            if(cur==0) res+= high*digit;
+            // cur为1时，只看高低位
+            else if (cur==1) res+= high*digit + low + 1;
+            // cur>1时，必须要
+            else res+= high*digit + digit;
+            // 更新低位数
+            low += cur* digit;
+            // 更新当前位数
+            cur = high%10;
+            // 更新高位数
+            high /= 10;
+            // 更新当前位数十进制次数
+            digit*=10;
+        }
+        return res;
+    }
+};
