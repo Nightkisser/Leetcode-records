@@ -1,0 +1,14 @@
+// 一个整型数组 nums 里除两个数字之外，其他数字都出现了两次。请写程序找出这两个只出现一次的数字。要求时间复杂度是O(n)，空间复杂度是O(1)。
+
+class Solution {
+public:
+    vector<int> singleNumbers(vector<int>& nums) {
+        if (nums.size()==0 && nums.size()==1) return nums;
+        vector<int> res;
+        int m = nums.size();
+        for (int i=0;i<nums.size();++i){
+            if (count(nums.begin(),nums.end(),nums[i])==1) res.push_back(nums[i]);
+        }
+        return res;
+    }
+};
