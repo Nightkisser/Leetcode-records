@@ -1,0 +1,27 @@
+// 输入一个递增排序的数组和一个数字s，在数组中查找两个数，使得它们的和正好是s。如果有多对数字的和等于s，则输出任意一对即可。
+
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        // 双指针,i,j分别从开头和末尾记起
+        // tar = nums[i]+nums[j]
+        // 当tar>target j向左移动一位
+        // 当tar<target j向右移动一位
+        // 当tar==target 存入数组并输出
+        // 时间复杂度O(n),空间复杂度O(1)
+        if (nums.size()==0 || target<2) return {};
+        vector<int> res;
+        int m= nums.size(),tar;
+        for (int i= 0, j= m-1; i< m, j>=0;){
+            tar = nums[i] + nums[j];
+            if (tar> target) --j;
+            if (tar< target) ++i;
+            if (tar == target) {
+                res.push_back(nums[i]);
+                res.push_back(nums[j]);
+                return res;
+            }
+        }
+        return {};
+    }
+};
