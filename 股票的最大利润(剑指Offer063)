@@ -1,0 +1,29 @@
+// 假设把某股票的价格按照时间先后顺序存储在数组中，请问买卖该股票一次可能获得的最大利润是多少？
+
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int m = prices.size();
+        if (m <= 1) return 0;
+        // 暴力解法
+        // 时间复杂度O(N2),空间复杂度O(1)
+        // int cur,res=0;
+        // for (int i= 0; i< m; ++i) {
+        //     cur = prices[i];
+        //     for (int j= i+1; j< m; ++j) {
+        //         if (prices[j] > cur) res = max(res,prices[j]-cur);
+        //     }
+        // }
+        // return res;
+        // 动态规划
+        // 时间复杂度O(n),空间复杂度O(1)
+        int cost = INT_MAX, profit = 0;
+        for(int price : prices) {
+            // 记录当前值前的最小值
+            cost = min(cost, price);
+            // 最大值为dp[n-1]或者当前值减去前面的最小值
+            profit = max(profit, price - cost);
+        }
+        return profit;
+    }
+};
