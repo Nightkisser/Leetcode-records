@@ -1,0 +1,46 @@
+// 给定一个数组 A[0,1,…,n-1]，请构建一个数组 B[0,1,…,n-1]，其中 B[i] 的值是数组 A 中除了下标 i 以外的元素的积, 即B[i]=A[0]×A[1]×…×A[i-1]×A[i+1]×…×A[n-1]。不能使用除法。
+
+class Solution {
+public:
+    vector<int> constructArr(vector<int>& a) {
+        int m = a.size(), mt=1;
+        if (m==0) return {};
+        vector<int> res;
+        res.push_back(1);
+        for (int i=0; i< m-1; ++i) {
+            mt *= a[i];
+            res.push_back(mt);
+        }
+        mt=1;
+        for (int i=m-1; i>=1; --i) {
+            mt *= a[i];
+            res[i-1]*= mt;
+        }
+        // 空间复杂度O(N)
+        // vector<int> res;
+        // vector<int> up,down;
+        // up.push_back(1);
+        // down.push_back(1);
+        // int front=1,back=1 ,mid;
+        // for (int i=0,j=m-1; i<m-1,j>=1; ++i,--j){
+        //     front*= a[i];
+        //     back*= a[j];
+        //     up.push_back(front);
+        //     down.push_back(back);
+        // }
+        // for (int i=0; i< m; ++i) {
+        //     mid = up[i]*down[m-1-i];
+        //     res.push_back(mid);
+        // }
+        // 时间复杂度O(N2),超出时间限制
+        // vector<int> res;
+        // for (int i=0; i< m; ++i) {
+        //     mt = 1;
+        //     for (int j=0; j< m; ++j) {
+        //         if (j != i) mt*= a[j];
+        //     }
+        //     res.push_back(mt);
+        // }
+        return res;
+    }
+};
