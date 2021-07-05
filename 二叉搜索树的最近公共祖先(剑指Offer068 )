@@ -1,0 +1,61 @@
+// 给定一个二叉搜索树, 找到该树中两个指定节点的最近公共祖先。
+// 百度百科中最近公共祖先的定义为：“对于有根树 T 的两个结点 p、q，最近公共祖先表示为一个结点 x，满足 x 是 p、q 的祖先且 x 的深度尽可能大（一个节点也可以是它自己的祖先）。”
+// 例如，给定如下二叉搜索树:  root = [6,2,8,0,4,7,9,null,null,3,5]
+
+class Solution {
+public:
+    // 一次遍历
+    // 时间复杂度O(N)，空间复杂度O(N)
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        TreeNode* res;
+        TreeNode* Node = root;
+        // 循环条件为Node和目标节点不同
+        while (Node != p && Node != q) {
+            // 根据二叉树特性
+            // 如果Node节点的值大于p,q节点的值，则目标节点在左子树
+            if (Node->val > p->val && Node->val > q->val) Node = Node->left;
+            // 如果Node节点的值小于p,q节点的值，则目标节点在右子树
+            else if (Node->val < p->val && Node->val < q->val) Node = Node->right;
+            // 如果Node节点的值在p,q节点的值之间，则目标节点为当前节点
+            else break;
+        }
+        return Node;
+    }
+    // 递归
+    // 时间复杂度O(N)，空间复杂度O(1)
+    // TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+    //     if (root->val > p->val && root->val > q->val) return lowestCommonAncestor(root->left,p,q);
+    //     else if (root->val < p->val && root->val < q->val) return lowestCommonAncestor(root->right,p,q);
+    //     return root;
+    // }
+    // 二次遍历
+    // 时间复杂度O(N),空间复杂度O(N)
+    // TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {    
+    //     if (root == nullptr) return nullptr;
+    //     TreeNode* res = nullptr;
+    //     vector<TreeNode*> p_path = getPath(root,p);
+    //     vector<TreeNode*> q_path = getPath(root,q);
+    //     // 遍历寻找两条路径的共同节点，直到最后一个共同节点，即最近公共祖先
+    //     for (int i = 0; i < p_path.size() && i < q_path.size(); ++i) {
+    //         if (q_path[i] == p_path[i]) res = q_path[i];
+    //     }
+    //     return res;
+    // }
+    // 定义一个记录从根节点到目标节点的路径函数
+    // vector<TreeNode*> getPath(TreeNode* root , TreeNode* p) {
+    //     vector<TreeNode*> path;
+    //     TreeNode* Node = root;
+    //     path.push_back(Node);
+    //     while (Node != p) {
+    //         if (Node->val > p->val) {
+    //             Node= Node->left;
+    //             path.push_back(Node);
+    //         }
+    //         else if (Node->val < p->val) {
+    //             Node= Node->right;
+    //             path.push_back(Node);
+    //         }
+    //     }
+    //     return path;
+    // }
+};
