@@ -1,0 +1,61 @@
+// 给定一个数组，将数组中的元素向右移动 k 个位置，其中 k 是非负数。
+
+class Solution {
+public:
+    // 定义一个翻转函数
+    // 先整体翻转
+    // 再分别局部翻转,每个元素翻转两次
+    // 时间复杂度O(N)(O(2N)),空间复杂度O(1)
+    void reverse(vector<int>& nums, int start, int end) {
+        while (start < end) {
+            swap(nums[start], nums[end]);
+            start += 1;
+            end -= 1;
+        }
+    }
+    void rotate(vector<int>& nums, int k) {
+        // 定位翻转起点元素的索引
+        k %= nums.size();
+        // 整体翻转
+        reverse(nums, 0, nums.size() - 1);
+        reverse(nums, 0, k - 1);
+        reverse(nums, k, nums.size() - 1);
+    }
+    // void rotate(vector<int>& nums, int k) {
+    //     int m = nums.size();
+    //     if (m == 0) nums = {};
+        
+    // }
+
+
+        // 超过时间限制
+        // for (int i = 0; i< k; ++i) {
+        //     for (int j = 0; j < m-1; ++j) {
+        //         swap(nums[j],nums[m-1]);
+        //     }
+        // }
+
+        /*// 数组 + 单指针
+        // 时间复杂度O(N),空间复杂度O(N)
+        // 无论数组长度是大于k，还是小于k，倒数第k节点为索引为m-k%m
+        int first = m - k % m;
+        // 创建一个存储数组
+        vector<int> res;
+        // 定义头结点
+        int second = 0;
+        // 先向中间数组加入从倒数k个节点
+        for (int j = first; j < m;) {
+            if (j < m) {
+                res.push_back(nums[j]);
+                ++j;
+            } 
+        }
+        // 再向数组加入前m-k个节点
+        for (int i = second; i < first; ++i) {
+            res.push_back(nums[i]);
+        }
+        // nums数组赋值中间数组，完成旋转
+        nums = res;
+        */
+    // }
+};
