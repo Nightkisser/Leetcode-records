@@ -1,0 +1,38 @@
+// 给定一个数组 nums，编写一个函数将所有 0 移动到数组的末尾，同时保持非零元素的相对顺序。
+
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums) {
+        int m = nums.size();
+        if (m == 0) return ;
+        // 一次遍历，双指针
+        // i指针寻找非0的元素
+        // j指针定位可交换位置
+        // 时间复杂度O(N),空间复杂度O(1)
+        int j = 0;
+        for (int i = 0; i < m; ++i) {
+            if (nums[i] != 0) {
+                int tmp = nums[i];
+				nums[i] = nums[j];
+				nums[j++] = tmp;
+                // swap(nums[i], nums[j]);
+                // ++j;
+            }
+        }
+        // 中间容器 + 双指针
+        // 时间复杂度O(N),空间复杂度O(N)
+        // vector<int> res(m);
+        // int pos_nzero = 0, pos_zero = m-1;
+        // for (int i = 0; i < m; ++i) {
+        //     if (nums[i] != 0) {
+        //         res[pos_nzero] = nums[i];
+        //         pos_nzero++; 
+        //     }
+        //     else {
+        //         res[pos_zero] = 0;
+        //         pos_zero--;
+        //     }
+        // }
+        // nums = res;
+    }
+};
