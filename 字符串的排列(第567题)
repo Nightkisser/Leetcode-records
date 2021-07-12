@@ -4,21 +4,32 @@
 class Solution {
 public:
     bool checkInclusion(string s1, string s2) {
-        int n = s1.length(), m = s2.length();
-        if (n > m) {
-            return false;
-        }
+        // int m = s1.size(), n = s2.size();
+        // unordered_set<char> st;
+        
+        int n = s1.size(), m = s2.size();
+        if (n > m) return false;
+        // 向量，默认初始化数字为0
         vector<int> cnt1(26), cnt2(26);
+        // 遍历s1，s2字符串，记录每个字符的数量，分别保存到两个向量中
         for (int i = 0; i < n; ++i) {
+            // s[i]-'a'表示26个字母中的第几个字母
             ++cnt1[s1[i] - 'a'];
             ++cnt2[s2[i] - 'a'];
         }
+        // 判断s1与s2是否相等
         if (cnt1 == cnt2) {
             return true;
         }
+        // 滑动窗口
+        // 从s2[n]开始添加并判断是否为子字符串
         for (int i = n; i < m; ++i) {
+            // 窗口向右滑动一格
+            // 增加窗口尾部的字符
             ++cnt2[s2[i] - 'a'];
+            // 减去窗口头部的字符
             --cnt2[s2[i - n] - 'a'];
+            // 如果当前字符串满足子字符串要求，则返回true
             if (cnt1 == cnt2) {
                 return true;
             }
