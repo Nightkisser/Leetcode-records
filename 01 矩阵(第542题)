@@ -1,0 +1,107 @@
+// 给定一个由 0 和 1 组成的矩阵，找出每个元素到最近的 0 的距离。两个相邻元素间的距离为 1 。
+
+class Solution {
+public:
+    // 尝试递归，失败
+    // int dfs(vector<vector<int>>& mat, int m, int n, int i, int j, int dis) {
+    //     if (mat[i][j] == 0) return dis;
+    //     // int a = dis, b = dis, c = dis, d = dis;
+    //     // if (i > 0) a = dfs(mat,m,n,i-1,j,a);
+    //     // if (i < m-1) b = dfs(mat,m,n,i+1,j,b);
+    //     // if (j > 0) c = dfs(mat,m,n,i,j-1,c);
+    //     // if (j < n-1) d = dfs(mat,m,n,i,j+1,d);
+
+    //     return 1 + min(min(dfs(mat,m,n,i-1,j,dis),dfs(mat,m,n,i+1,j,dis)), min(dfs(mat,m,n,i,j-1,dis),dfs(mat,m,n,i,j+1,dis)));
+    // }
+    // vector<vector<int>> updateMatrix(vector<vector<int>>& mat) {
+    //     int m = mat.size(), n = mat[0].size(), d;
+    //     // vector<vector<int>> res(m,vector<int>(n));
+    //     // for (int i = 0; i < m; i++) {
+    //     //     d = 0;
+    //     //     for (int j = 0; j < n; j++) {
+    //     //         if (mat[i][j] == 0) res[i][j] = 0;
+    //     //         else res[i][j] = dfs(mat, m, n, i, j, d);
+    //     //     }
+    //     // }
+    vector<vector<int>> updateMatrix(vector<vector<int>>& mat) {
+        int m = mat.size(), n = mat[0].size();
+        // 动态规划
+        // 时间复杂度O(NM),空间复杂度O(1)
+        // vector<vector<int>> dp(m,vector<int>(n));
+        // // 将0元素置入目标矩阵中，将非0元素标记起来
+        // for (int i = 0; i < m; i++) {
+        //     for (int j = 0; j < n; j++) {
+        //         dp[i][j] = mat[i][j] == 0 ? 0 : 10000;
+        //     }
+        // }
+        // // 根据转移方程dp[i][j]=min(dp[i-1][j],dp[i-1][j-1])
+        // // dp[i][j]与dp[i-1][j]和dp[i-1][j-1]有关
+        // // 从左上角开始遍历
+        // for (int i = 0; i < m; i++) {
+        //     for (int j = 0; j < n; j++) {
+        //         if (i - 1 >= 0) dp[i][j] = min(dp[i][j], dp[i-1][j] + 1);
+        //         if (j - 1 >= 0) dp[i][j] = min(dp[i][j], dp[i][j-1] + 1);
+        //     }
+        // }
+        // // 根据转移方程dp[i][j]=min(dp[i+1][j],dp[i+1][j+1])
+        // // dp[i][j]与dp[i+1][j]和dp[i+1][j+1]有关
+        // // 从右下角开始
+        // for (int i = m - 1; i >= 0; i--) {
+        //     for (int j = n - 1; j >= 0; j--) {
+        //         if (i + 1 < m) dp[i][j] = min(dp[i][j], dp[i+1][j] + 1);
+        //         if (j + 1 < n) dp[i][j] = min(dp[i][j], dp[i][j+1] + 1);
+        //     }
+        // }
+        // return  dp;
+
+        // bfs
+        // 时间复杂度O(NM),空间复杂度O(NM)
+        queue<pair<int,int>> queue;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (mat[i][j] == 0) queue.push({i, j});
+                else mat[i][j] = -1;
+            }
+        }
+        vector<int> dx = {-1, 1, 0, 0};
+        vector<int> dy = {0, 0, -1, 1};
+        while (!queue.empty()) {
+            auto point = queue.front(); queue.pop();
+            int x = point.first, y = point.second;
+            for (int i = 0; i < 4; i++) {
+                int newX = x + dx[i];
+                int newY = y + dy[i];
+                // 如果四邻域的点是 -1，表示这个点是未被访问过的 1
+                // 所以这个点到 0 的距离就可以更新成 matrix[x][y] + 1。
+                if (newX >= 0 && newX < m && newY >= 0 && newY < n 
+                        && mat[newX][newY] == -1) {
+                    mat[newX][newY] = mat[x][y] + 1;
+                    queue.push({newX, newY});
+                }
+            }
+        }
+        return mat;
+
+        // bfs超出时间限制
+        // int mid;
+        // vector<vector<int>> v1, v2;
+        // for (int i = 0; i < m; i++) {
+        //     for (int j = 0; j < n; j++) {
+        //         if (mat[i][j] == 0) {
+        //             v1.push_back({i,j});
+        //             res[i][j] = 0;
+        //         }
+        //         else v2.push_back({i,j});
+        //     }
+        // }
+        // for (int i = 0; i < v2.size(); i++) {
+        //     d = INT_MAX;
+        //     for (int j = 0; j < v1.size(); j++) {
+        //         mid = abs(v2[i][0]-v1[j][0]) + abs(v2[i][1]-v1[j][1]);
+        //         d = min(d, mid);
+        //     }
+        //     res[v2[i][0]][v2[i][1]] = d;
+        // }
+        // return res;
+    }
+};
