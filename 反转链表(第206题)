@@ -1,0 +1,61 @@
+// 给你单链表的头节点 head ，请你反转链表，并返回反转后的链表。
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        // 借助外部容器翻转
+        // 时间复杂度O(2N),空间复杂度O(N)
+        // ListNode* pre = new ListNode();
+        // ListNode* first = pre;
+        // vector<int> v;
+        // while(head) {
+        //     v.push_back(head->val);
+        //     head = head->next;
+        // }
+        // for (int i = v.size()-1; i >= 0 ; --i) {
+        //     ListNode* mid = new ListNode(v[i]);
+        //     pre->next = mid;
+        //     pre = mid;
+        // }
+        // return first->next;
+
+        // 依次遍历，迭代
+        // 时间复杂度O(N),空间复杂度O(1)
+        // 定义末尾空节点,并储存前一个节点
+        // ListNode* cur = nullptr;
+        // // 当head为空指针时，停止遍历，即翻转结束
+        // while(head) {
+        //     // 储存中间节点
+        //     ListNode* newL = head;
+        //     // 对链表进行遍历
+        //     head = head->next;
+        //     // 逐个反转,当前节点的下一个节点指向前一个节点
+        //     newL->next = cur;
+        //     // 更新前一个节点的位置
+        //     cur = newL;
+        // }
+        // return cur;
+
+        // 递归
+        // 时间复杂度O(N)，空间复杂度O(N)
+        if (!head || !head->next) return head;
+        // head->next及之后的节点已经完成翻转
+        ListNode* newl = reverseList(head->next);
+        // 将翻转好的末节点的下一个节点指向当前节点
+        head->next->next = head;
+        // 将当前节点的以前一个节点的关系断开，并且考虑到翻转后的末节点即n1->next应该为空指针
+        head -> next = nullptr;
+
+        return newl;
+    }
+};
