@@ -1,0 +1,39 @@
+// 给定两个整数 n 和 k，返回 1 ... n 中所有可能的 k 个数的组合。
+
+// 如果解决一个问题有多个步骤，每一个步骤有多种方法，题目又要我们找出所有的方法，可以使用回溯算法；
+
+class Solution {
+public:
+    vector<vector<int>> res;
+    vector<int> single;
+    // 递归+回溯
+    // 时间复杂度O(Cnk * k)，空间复杂度O(n+k)
+    vector<vector<int>> combine(int n, int k) {
+        if (n < k) return {};
+        dfs(1,n,k);
+        return res;
+    }
+
+    // 深度优先遍历
+    void dfs(int i, int n, int k) {
+        // 函数停止条件
+        // 当组合储存容器的大小等于k时，添加组合
+        if (single.size() == k) {
+            res.push_back(single);
+            return ;
+        }
+
+        // 当前容器大小与当前数之后数字的总和小于k时，即无法生成组合时停止
+        if (single.size() + (n - i + 1) < k) return ;
+
+        // 添加组合数字
+        single.push_back(i);
+        // 考虑当前数字的组合
+        dfs(i+1,n,k);
+
+        // 回溯，回头的过程，将已添加的删除
+        single.pop_back();
+        // 不考虑包含当前数字的组合
+        dfs(i+1,n,k);
+    }
+};
