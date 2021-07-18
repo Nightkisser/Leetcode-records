@@ -1,0 +1,71 @@
+// 给定一个二叉树，返回它的 后序 遍历。
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    void postorder(TreeNode* r, vector<int>& v) {
+        if (!r) return ;
+        postorder(r->left,v);
+        postorder(r->right,v);
+        v.push_back(r->val);
+    }
+    vector<int> postorderTraversal(TreeNode* root) {
+        if(!root) return {};
+        vector<int> res;
+        // postorder(root,res);
+        // return res;
+
+        // 正常迭代
+        stack<TreeNode*> stk;
+        // 记录已经取过的子节点
+        // TreeNode* prel;
+        // while(root || !stk.empty()) {
+        //     while(root) {
+        //         stk.push(root);
+        //         root = root->left;
+        //     }
+        //     // 到达左子树的叶节点
+        //     root = stk.top();stk.pop();
+        //     // 如果不存在右节点或者右节点等于已记录的节点
+        //     if (!root->right || root->right == prel) {
+        //         // 记录当前节点
+        //         prel = root;
+        //         // 往数组加入当前节点的值
+        //         res.push_back(root->val);
+        //         // 将当前节点指针设为空指针，防止当前节点的重复循环
+        //         root = nullptr;
+        //     }
+        //     // 如果存在右节点或者右节点不等于已记录的节点
+        //     else {
+        //         // 继续将节点入栈
+        //         stk.push(root);
+        //         // 继续取右节点
+        //         root = root->right;
+        //     }
+        // }
+
+        // 分析后遍历，后序为(左右中),先序为(中左右)
+        // 可以将先序遍历的左右顺序调换后，反转整个数组
+        while(root || !stk.empty()) {
+            while(root) {
+                stk.push(root);
+                res.push_back(root->val);
+                root = root->right;
+            }
+            root = stk.top(); stk.pop();
+            root = root->left;
+        }
+        reverse(res.begin(),res.end());
+        return res;
+    }
+};
