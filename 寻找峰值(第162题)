@@ -1,0 +1,48 @@
+// 峰值元素是指其值大于左右相邻值的元素。
+// 给你一个输入数组 nums，找到峰值元素并返回其索引。数组可能包含多个峰值，在这种情况下，返回 任何一个峰值 所在位置即可。
+// 你可以假设 nums[-1] = nums[n] = -∞。
+
+class Solution {
+public:
+    int findPeakElement(vector<int>& nums) {
+        int m = nums.size();
+        // if (m==1) return 0;
+        // if (m >= 2 && nums[0] > nums[1]) return 0;
+        // if (m >= 2 && nums[m-1] > nums[m-2]) return m-1;
+        // int res;
+        // for (int i = 1; i < m-1; ++i) {
+        //     if (nums[i] > nums[i-1] && nums[i] > nums[i+1]) {
+        //         res = i;
+        //         break;
+        //     }
+        // }
+
+        // 迭代二分查找
+        // 时间复杂度O(logN),空间复杂度O(1)
+        // int left = 0, right = m - 1;
+        // while(left < right) {
+        //     int mid = left + (right-left)/2;
+        //     // 因为nums[-1]和nums[n]为负无穷
+        //     // 所以沿着大的方向，收缩区间，总能找到峰值
+        //     if (nums[mid] > nums[mid+1]) {
+        //         right = mid; 
+        //     }
+        //     else left = mid+1;
+        // }
+        // return right;
+
+        // 递归二分查找
+        // 时间复杂度o(logn),空间复杂度O(logn),栈空间层数
+        return search(nums, 0, m-1);
+    }
+    // 递归函数
+    int search(vector<int>& nums, int l, int r) {
+        if (l == r)
+            return l;
+        int mid = (l + r) / 2;
+        if (nums[mid] > nums[mid + 1])
+            return search(nums, l, mid);
+        return search(nums, mid + 1, r);
+    }
+
+};
