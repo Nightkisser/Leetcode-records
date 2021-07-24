@@ -1,0 +1,86 @@
+// 给定 S 和 T 两个字符串，当它们分别被输入到空白的文本编辑器后，判断二者是否相等，并返回结果。 # 代表退格字符。
+// 注意：如果对空文本输入退格字符，文本继续为空。
+
+class Solution {
+public:
+    bool backspaceCompare(string s, string t) {
+        int m = s.size(), n = t.size();
+        if (m == 0 && n == 0) return true;
+
+        // 双指针
+        // 时间复杂度O(N),空间复杂度O(1)
+        int fir = m-1, sec = n-1;
+        int s1_count = 0, s2_count = 0;
+        while (fir >= 0 || sec >= 0) {
+            while(fir >= 0) {
+                if (s[fir]=='#') ++s1_count;
+                else {
+                    if (s1_count != 0) --s1_count;
+                    else break;
+                }
+                --fir;
+            }
+            while(sec >= 0) {
+                if (t[sec]=='#') ++s2_count;
+                else {
+                    if (s2_count != 0) --s2_count;
+                    else break;
+                }
+                --sec;
+            }
+            if (fir >= 0 && sec >= 0) {
+                if (s[fir]!=t[sec]) return false;
+            }
+            else if (fir >= 0 || sec >= 0) return false;
+            --fir; --sec;
+        }
+        return true;
+        // // 单指针，分别遍历
+        // // 时间复杂度O(N)，空间复杂度O(N)，至多为字符串长度
+        // // 定义两个记录退格数量的变量
+        // int s1_count = 0, s2_count = 0;
+        // // 定义两个储存字符串结果的变量
+        // string ss,tt;
+        // //从后向前遍历第一个字符串
+        // for (int left = m-1; left >= 0;left--) {
+        //     // 如果遇到退格，计数+1
+        //     if (s[left] == '#') s1_count++;
+        //     // 如果不是退格
+        //     else {
+        //         // 并且退格计数不为0，保存
+        //         if (s1_count > 0) s1_count--;
+        //         // 退格计数为0,保存字符
+        //         else ss+=s[left];
+        //     }
+        // }
+        // // 从后向前遍历第二个字符串
+        // for (int right = n-1; right >= 0; right--) {
+        //     if (t[right] == '#') s2_count++;
+        //     else {
+        //         if (s2_count > 0) s2_count--;
+        //         else tt+=t[right];
+        //     }
+        // }
+        // // 如果两个字符串相等则返回true
+        // if (ss==tt) return true;
+        // return false;
+    }
+
+    // 堆思想，后进先出
+    // 时间复杂度O(N+M),空间复杂度O(N+M)
+    // bool backspaceCompare(string s, string t) {
+    //     return build(s) == build(t);
+    // }
+
+    // string build(string str) {
+    //     string ret;
+    //     for (char ch : str) {
+    //         if (ch != '#') {
+    //             ret.push_back(ch);
+    //         } else if (!ret.empty()) {
+    //             ret.pop_back();
+    //         }
+    //     }
+    //     return ret;
+    // }
+};
