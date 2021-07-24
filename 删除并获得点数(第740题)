@@ -1,0 +1,34 @@
+//给你一个整数数组 nums ，你可以对它进行一些操作。
+// 每次操作中，选择任意一个 nums[i] ，删除它并获得 nums[i] 的点数。之后，你必须删除 所有 等于 nums[i] - 1 和 nums[i] + 1 的元素。
+// 开始你拥有 0 个点数。返回你能通过这些操作获得的最大点数。
+
+class Solution {
+public:
+    int deleteAndEarn(vector<int>& nums) {
+        int m = nums.size(),res, dp0, dp1;
+        if (m == 1) return nums[0];
+        // 对原数组进行排序，取出最大值
+        sort(nums.begin(), nums.end());
+        vector<int> vec(nums[m-1]+1);
+
+        // int maxv = 0;
+        // for (int i = 0; i < m; ++i) {
+        //     if (nums[i] > maxv) maxv = nums[i];
+        // }
+        // vector<int> vec(max+1);
+
+        // 根据最大值构造出相应大小的数组
+        // 对应下标数的总数值统计，将不能取左右数的问题转化为打家劫舍的问题
+        // 即不能相邻数值
+        for (int i = 0; i < m; ++i) vec[nums[i]] += nums[i];
+
+        // 使用打家劫舍思想，动态规划，然后遍至最后一个数，即求出最大值
+        dp0 = vec[0], dp1 = max(vec[0], vec[1]);
+        for (int i = 2; i < nums[m-1]+1; ++i) {
+            res = max(dp1, dp0 + vec[i]);
+            dp0 = dp1;
+            dp1 = res;
+        }
+        return res;
+    }
+};
