@@ -1,0 +1,35 @@
+// 给定两个字符串 s 和 p，找到 s 中所有 p 的 异位词 的子串，返回这些子串的起始索引。不考虑答案输出的顺序。
+// 异位词 指字母相同，但排列不同的字符串。
+
+class Solution {
+public:
+    vector<int> findAnagrams(string s, string p) {
+        int m = s.size(), n = p.size();
+        if (m < n) return {};
+        // 滑动窗口+双指针
+        // 时间复杂度O(N),空间复杂度O(26)
+        // 滑动窗口的字符数量储存数组
+        vector<int> win(26);
+        // 存储目标字符串字符计数数组
+        vector<int> mid(26);
+        vector<int> res;
+        // 一次遍历存储目标字符串字符计数数组
+        for (int j = 0; j < n; ++j) ++mid[p[j]-'a'];
+        // 形成初始滑动窗口
+        for (int i = 0; i < n-1; ++i) ++win[s[i]-'a'];
+        // 滑动窗口的边界指针
+        int left = 0, right = n-1;
+        while(right < m) {
+            // 将目前字符计数加一
+            ++win[s[right]-'a'];
+            // 比对字符数量数组，如果相同则添加left
+            if (win == mid) res.push_back(left);
+            // 滑动窗口左边界字符计数减一
+            --win[s[left]-'a'];
+            // 窗口向右移动
+            ++right;
+            ++left;
+        }
+        return res;
+    }
+};
