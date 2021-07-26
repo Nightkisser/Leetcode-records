@@ -1,0 +1,68 @@
+// 给你一个由 '1'（陆地）和 '0'（水）组成的的二维网格，请你计算网格中岛屿的数量。
+// 岛屿总是被水包围，并且每座岛屿只能由水平方向和/或竖直方向上相邻的陆地连接形成。
+// 此外，你可以假设该网格的四条边均被水包围。
+
+
+class Solution {
+public:
+    int numIslands(vector<vector<char>>& grid) {
+        int m = grid.size(), n = grid[0].size(), res = 0;
+        
+        // 广度优先, 寻找陆地，然后根据上下左右蔓延判断岛屿
+        // 时间复杂度O(MN)，空间复杂度O(min(M,N))，在最坏情况下，整个网格均为陆地，队列的大小可以达到min(M,N)
+        queue<pair<int,int>> q;
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                if (grid[i][j] == '1') {
+                    ++res;
+                    q.push({i,j});
+                    grid[i][j] = '0';
+                    while(!q.empty()){
+                        int f = q.front().first, r = q.front().second;
+                        q.pop();
+                        if (r < n-1 && grid[f][r+1] == '1' ) {
+                            q.push({f,r+1});
+                            grid[f][r+1] = '0';
+                        }
+                        if (f < m-1 && grid[f+1][r] == '1') {
+                            q.push({f+1,r});
+                            grid[f+1][r] = '0';
+                        }
+                        if (r > 0 && grid[f][r-1] == '1' ) {
+                            q.push({f,r-1});
+                            grid[f][r-1] = '0';
+                        }
+                        if (f > 0 && grid[f-1][r] == '1' ) {
+                            q.push({f-1,r});
+                            grid[f-1][r] = '0';
+                        }
+                    }
+                }
+            }
+        }
+        return res;
+
+        // for (int i = 0; i < m; ++i) {
+        //     for (int j = 0; j < n; ++j) {
+        //         if (grid[i][j] == '1') {
+        //             ++res;
+        //             dfs(grid,i,j);
+        //         }
+        //     }
+        // }
+        // return res;
+    }
+    // 深度优先
+    // 时间复杂度O(MN)，空间复杂度O(min(M,N)),在最坏情况下，整个网格均为陆地，深度优先搜索的深度达到MN。
+    void dfs(vector<vector<char>>& grid, int r, int c) {
+        int nr = grid.size();
+        int nc = grid[0].size();
+
+        grid[r][c] = '0';
+        if (r - 1 >= 0 && grid[r-1][c] == '1') dfs(grid, r - 1, c);
+        if (r + 1 < nr && grid[r+1][c] == '1') dfs(grid, r + 1, c);
+        if (c - 1 >= 0 && grid[r][c-1] == '1') dfs(grid, r, c - 1);
+        if (c + 1 < nc && grid[r][c+1] == '1') dfs(grid, r, c + 1);
+    }
+
+};
