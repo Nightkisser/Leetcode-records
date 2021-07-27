@@ -1,0 +1,101 @@
+// 给定一个二叉树，填充它的每个 next 指针，让这个指针指向其下一个右侧节点。如果找不到下一个右侧节点，则将 next 指针设置为 NULL。
+
+// 初始状态下，所有 next 指针都被设置为 NULL。
+
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    Node* left;
+    Node* right;
+    Node* next;
+
+    Node() : val(0), left(NULL), right(NULL), next(NULL) {}
+
+    Node(int _val) : val(_val), left(NULL), right(NULL), next(NULL) {}
+
+    Node(int _val, Node* _left, Node* _right, Node* _next)
+        : val(_val), left(_left), right(_right), next(_next) {}
+};
+*/
+
+class Solution {
+public:
+    Node* connect(Node* root) {
+        if (!root) return nullptr;
+        // 只使用常数空间，即用next节点
+        // 时间复杂度O(N),空间复杂度O(1)
+        
+        Node* start = root;
+        while (start) {
+            // nextStart用来记录下一层的首节点
+            // last用来记录上一个节点
+            Node *last = nullptr, *nextStart = nullptr;
+            for (Node *n = start; n != nullptr; n = n->next) {
+                // 如果左节点存在
+                if (n->left) {
+                    // last是否存在
+                    if (last) last->next = n->left;
+                    // 下一层的首节点是否确定
+                    if (!nextStart) nextStart = n->left;
+                    // 更新last节点
+                    last = n->left;
+                }
+                // 如果右节点存在
+                if (n->right) {
+                    if (last) last->next = n->right;
+                    if (!nextStart) nextStart = n->right;
+                    last = n->right;
+                }
+            }
+            // 开启下一层的遍历
+            start = nextStart;
+        }
+        // 广度优先遍历
+        // queue<Node*> q;
+        // q.push(root);
+        // root->next = nullptr;
+
+        // 不使用节点存储数组
+        // 时间复杂度O(N),空间复杂度O(N)
+        // while(!q.empty()) {
+        //     int m = q.size();
+        //     Node* f = new Node();
+        //     for (int i = 0; i < m; ++i) {
+        //         Node* mid = q.front(); q.pop();
+        //         if (mid->left) q.push(mid->left);
+        //         if (mid->right) q.push(mid->right);
+
+        //         if (i != 0) f->next = mid;
+        //         f = mid;
+        //     }
+        //     f->next = nullptr;
+        // }
+
+        // 使用节点存储数组
+        // 时间复杂度O(N*h),空间复杂度O(N+K)
+        // while(!q.empty()) {
+        //     vector<Node*> vec;
+        //     int m = q.size();
+        //     for (int i = 0; i < m; ++i) {
+        //         Node* mid = q.front(); q.pop();
+        //         if (q.empty()) mid->next = nullptr;
+        //         if (mid->left) {
+        //             q.push(mid->left);
+        //             vec.push_back(mid->left);
+        //         }
+        //         if (mid->right) {
+        //             q.push(mid->right);
+        //             vec.push_back(mid->right);
+        //         }
+        //     }
+        //     int n = vec.size();
+        //     for (int i = 0; i < n-1; ++i) {
+        //         vec[i]->next = vec[i+1];
+        //     }
+        // }
+        return root;
+
+    }
+};
