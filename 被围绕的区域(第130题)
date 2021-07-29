@@ -5,6 +5,8 @@ private:
         int m, n;
 public:
     // 深度遍历优先
+    // 时间复杂度O(NM),深度优先搜索过程中，每一个点至多只会被标记一次。
+    // 空间复杂度O(NM),主要为深度优先搜索的栈的开销。
     void dfs(vector<vector<char>>& board, int x, int y) {
         // 递归结束条件
         // 遍历元素到达边界，或者元素值不为"O"
