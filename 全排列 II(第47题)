@@ -1,0 +1,43 @@
+// 给定一个可包含重复数字的序列 nums ，按任意顺序 返回所有不重复的全排列。
+
+class Solution {
+public:
+    void back(vector<int>& nums, int m, vector<int>& sign, vector<vector<int>>& res, vector<int>& mid) {
+        // 搜索回溯
+        // 时间复杂度O(N*N!),最坏情况下没有重复数字排列共N!个,空间复杂度O(N+N)
+        // 当排列数组的大小等于原数组的大小时，递归结束，存储该排列
+        if (mid.size() == nums.size()) {
+            res.push_back(mid);
+            return;
+        }
+        for (int i = 0; i < nums.size(); ++i) {
+            // 从头开始遍历，遇到标记过的就跳过
+            // 如果当前值与前一个值相等并且前一个值已经被遍历过了，跳过进入下一步，排除首元素相等重复排列的情况
+            if (sign[i] || (i > 0 && nums[i] == nums[i-1] && !sign[i-1])) continue;
+            // 添加排列元素
+            mid.push_back(nums[i]);
+            // 标记遍历过的元素
+            sign[i] = 1;
+            // 遍历获取下一个排列元素
+            back(nums, m+1, sign, res, mid);
+
+            // 回溯
+            // 结尾删除刚添加的元素
+            mid.pop_back();
+            // 将标记过的元素还原为未标记状态
+            sign[i] = 0;
+        }
+    }
+    vector<vector<int>> permuteUnique(vector<int>& nums) {
+        int m = nums.size();
+        // 标记数组和排列数组
+        vector<int> sign(m), mid;
+        // 对原数组进行排序，因为排列是不重复的
+        sort(nums.begin(), nums.end());
+        vector<vector<int>> res;
+        // 调用递归函数
+        back(nums, 0, sign, res, mid);
+        return res;
+
+    }
+};
