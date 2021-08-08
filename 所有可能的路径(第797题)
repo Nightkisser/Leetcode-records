@@ -1,0 +1,35 @@
+// 给一个有 n 个结点的有向无环图，找到所有从 0 到 n-1 的路径并输出（不要求按顺序）
+// 二维数组的第 i 个数组中的单元都表示有向图中 i 号结点所能到达的下一些结点（译者注：有向图是有方向的，即规定了 a→b 你就不能从 b→a ）空就是没有下一个结点了。
+
+class Solution {
+public:
+    void dfs(vector<vector<int>>& g, int m, int num, vector<int>& mid, vector<vector<int>>& res) {
+        // num为当前节点指向的节点
+        // 遍历搜索可能的路径
+        for (int j = 0; j < g[num].size(); ++j) {
+            // 添加路径节点
+            mid.push_back(g[num][j]);
+            // 如果到达末结点，即m-1，则往路径数组中添加
+            if (g[num][j] == m-1) {
+                res.push_back(mid);
+            }
+            // 如果没有到达末结点，递归调用当前节点g[num][j]
+            else dfs(g, m, g[num][j], mid, res);
+            // 回溯到路径存储的上一个状态，保证不漏掉每一个路径
+            mid.pop_back();
+        }
+    }
+    vector<vector<int>> allPathsSourceTarget(vector<vector<int>>& graph) {
+        // 深度优先遍历 + 回溯
+        // 时间复杂度O(2^N*N),空间复杂度O(2^N*N)
+        int m = graph.size();
+        if (m == 0) return {};
+        // 创建路径结果储存数组
+        vector<vector<int>> res;
+        // 创建初始路径，因为路径为从0到m-1，则必然包含节点0
+        vector<int> mid = {0};
+        // 从0指向图开始调用深度优先遍历
+        dfs(graph, m, 0, mid, res);
+        return res;
+    }
+};
