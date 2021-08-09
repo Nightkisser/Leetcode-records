@@ -1,0 +1,46 @@
+//给你一个整数数组 nums ，数组中的元素 互不相同 。返回该数组所有可能的子集（幂集）。
+//解集 不能 包含重复的子集。你可以按 任意顺序 返回解集。
+
+class Solution {
+public:
+    void backtrace(vector<int>& nums, int num, vector<vector<int>>& res, vector<int>& mid) {
+        // 回溯
+        // 添加当前的组合
+        res.push_back(mid);
+        // 遍历数组，搜索不重复的组合
+        for (int i = num; i < nums.size(); ++i) {
+            // 添加当前数
+            mid.push_back(nums[i]);
+            // 递归调用下一个节点为地点的函数
+            backtrace(nums, i+1, res, mid);
+            // 回溯至保存前的状态
+            mid.pop_back();
+        }
+    }
+    vector<vector<int>> subsets(vector<int>& nums) {
+        
+        int m = nums.size();
+        if (m == 0) return {};
+        vector<vector<int>> res;
+        
+        // 递归+回溯
+        // 时间复杂度O(N*2^N),空间复杂度O(N+N),临时数组空间N,递归栈空间N
+        // vector<int> mid;
+        // backtrace(nums, 0, res, mid);
+        
+        // 二进制迭代
+        // 穷举组合位置，可知各个组合有对应的二进制，且总共有2*m个状态
+        // 遍历二进制数，获取对应的组合，然后添加至结果数组中
+        for (int i = 0; i < (1<< m); ++i) {
+            vector<int> mid;
+            // 采用二进制位运算中的与运算进行组合的筛选
+            for (int j = 0; j < m; ++j) {
+                if (i & (1 << j)) {
+                    mid.push_back(nums[j]);
+                }
+            }
+            res.push_back(mid);
+        }
+        return res;
+    }
+};
