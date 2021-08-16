@@ -1,0 +1,49 @@
+/*
+给你一个整数数组 coins ，表示不同面额的硬币；以及一个整数 amount ，表示总金额。
+计算并返回可以凑成总金额所需的 最少的硬币个数 。如果没有任何一种硬币组合能组成总金额，返回 -1 。
+你可以认为每种硬币的数量是无限的。
+*/
+
+
+class Solution {
+public:
+    int coinChange(vector<int>& coins, int amount) {
+        int m = coins.size();
+        // 目标钱数为0,返回0张
+        if (amount == 0) return 0;
+        // 没有有效硬币，返回-1
+        if (m == 0) return -1;
+        // 面额排序，如果最小面额大于目标钱数，返回-1
+        sort(coins.begin(),coins.end());
+        if (coins[0] > amount) return -1;
+        // 初始化动态规划数组dp[amount+1], 因为包含0的情况，数组大小amount+1，默认值取-1，初始状态无法取值
+        vector<int> dp(amount+1, -1);
+        // 初始化dp[0] = 0
+        dp[0] = 0;
+        // 将在amount范围内的面额对应位置初始化为1
+        for (int i = 0; i < m; ++i) {
+            if (coins[i] < amount) dp[coins[i]] = 1;
+        }
+
+        // 从1遍历到目标钱数amount
+        for (int i = 1; i <= amount; ++i) {
+            // 循环判断i-coins[j]的情况，类似于爬楼梯，考虑每一种加上coins[j]刚好等于目标钱数amount的情况
+            // 即状态转移方程为dp[amount] = min(dp[amount - coins[j]] | 0=<j<m) + 1;
+            for (int j = 0; j < m; ++j) {
+                // 如果当前面额超过当前目标值，退出循环
+                if (i < coins[j]) break;
+                // 如果dp[i-coins[j]]能够被组合表示，考虑前面的每一个dp[i-coins[j]]状态，取出最小值
+                if (dp[i-coins[j]] != -1) {
+                    // 因为初始值为-1，则在第一次更新dp[i]的值
+                    if (dp[i] == -1) dp[i] = dp[i-coins[j]]+ 1;
+                    // 比较取最小值
+                    else dp[i] = min(dp[i-coins[j]]+ 1, dp[i]);
+                }
+                // 如果dp[i-coins[j]]不能被表示，则进入下一步
+                else continue;
+            }
+        }
+        // 返回最后的结果
+        return dp[amount];
+    }
+};
