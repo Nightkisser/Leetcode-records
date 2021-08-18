@@ -1,0 +1,26 @@
+// 给你两个整数 left 和 right ，表示区间 [left, right] ，返回此区间内所有数字 按位与 的结果（包含 left 、right 端点）。
+
+class Solution {
+public:
+    int rangeBitwiseAnd(int left, int right) {
+        // 时间复杂度O(logn),空间复杂度O(1)
+        // 寻找公共前缀
+        // 边界同时向右位移，记录位移次数t
+        // 当相等时，即找到公共前缀，将公共前缀统一向左位移t位，即公共前缀
+        int t = 0;
+        while(left < right) {
+            left = left >> 1;
+            right = right >> 1;
+            ++t;
+        }
+        return right << t;
+        
+        // 时间复杂度O(logn),空间复杂度O(1)
+        // n&n-1可以从右往左去掉公共前缀右边的1
+        // n = n&n-1进行下一次消除
+        while(left < right) {
+            right &= right-1;
+        }
+        return right;
+    }
+};
