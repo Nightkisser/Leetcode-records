@@ -1,0 +1,33 @@
+// 第 i 个人的体重为 people[i]，每艘船可以承载的最大重量为 limit。
+// 每艘船最多可同时载两人，但条件是这些人的重量之和最多为 limit。
+// 返回载到每一个人所需的最小船数。(保证每个人都能被船载)。
+
+class Solution {
+public:
+    int numRescueBoats(vector<int>& people, int limit) {
+        int m = people.size(), res = 0;
+        if (m == 0) return 0;
+        // 排序，降低问题的复杂度
+        sort(people.begin(), people.end());
+        // 贪心算法
+        // 时间复杂度O(nlogn),空间复杂度O(logn)，均为排序的复杂度
+
+        // 因为限载2人，并且尽可能的减少船只数量
+        // 参考最轻和最重的人搭配的情况
+        // 如果不能同乘一艘船，则最重的单独一艘船，再考虑剩下的n-1个人
+        // 如果可以同乘一艘船，在再考虑剩下的n-2个人
+        int i = 0, j = m-1;
+        while (i <= j) {
+            if (people[i] + people[j] > limit) {
+                --j;
+            }
+            else {
+                --j;
+                ++i;
+            }
+            ++res;
+        }
+        
+        return res;
+    }
+};
