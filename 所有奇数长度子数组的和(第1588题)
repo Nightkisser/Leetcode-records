@@ -1,0 +1,54 @@
+// 给你一个正整数数组 arr ，请你计算所有可能的奇数长度子数组的和。
+// 子数组 定义为原数组中的一个连续子序列。
+// 请你返回 arr 中 所有奇数长度子数组的和 。
+
+class Solution {
+public:
+    int sumOddLengthSubarrays(vector<int>& arr) {
+        int m = arr.size();
+        int res = 0;
+
+        // 暴力法
+        // 时间复杂度O(N^3),空间复杂度O(1)
+        // for (int i = 1; i <= m; i+=2) {
+        //     for (int j = 0; j<= m-i; ++j) {
+        //         for (int k = 0; k < i; ++k) {
+        //             res += arr[j+k];
+        //         }
+        //     }
+        // }
+
+        // 前缀和(优化,空间换时间)
+        // 时间复杂度O(N^2),空间复杂度O(N)
+        // vector<int> pre(m+1);
+        // for (int i = 0; i < m; ++i) {
+        //     pre[i+1] = pre[i] + arr[i];
+        // }
+        // for (int i = 1; i <= m; i+=2) {
+        //     for (int j = 0; j<= m-i; ++j) {
+        //         // 子数组末尾位置累计值-首部前一个位置的累计值
+        //         res += pre[j+i] - pre[j];
+        //     }
+        // }
+
+        // 数学推导(优化)
+        // 时间复杂度O(N), 空间复杂度O(1)
+        
+        // 某位数字的左右组合情况：
+        // （1）数字左边的奇数与偶数组合的个数为left = index + 1,包括0, 1, 2, ..., index-1
+        // （2）数字右边的奇数和偶数组合的个数为right = m - index, 包括idx+1, index+2, ..., m-1
+
+        // 子数组长度为奇数，且子数组连续。
+        // 要使得子数组的长度为奇数，则左右都为偶数组合或者左右都为奇数组合
+        // 某数字的左边奇数组合数为 left_odd = left/2, 左边的偶数组合为left_even = (left+1)/2
+        // 某数字的右边奇数组合数为 right_odd = right/2, 左边的偶数组合为right_even = (right+1)/2
+        // 因此某位数出现次数为left_odd * right_odd  + left_even*right_even
+        for (int j = 0; j < m; ++j) {
+            int left_odd = (j+1)/2, left_even = (j+2)/2;
+            int right_odd = (m-j)/2, right_even = (m-j+1)/2;
+            int count = left_odd * right_odd  + left_even*right_even;
+            res += count*arr[j];
+        }
+        return res;
+    }
+};
